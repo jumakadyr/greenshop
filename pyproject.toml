@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "greenshop"
+version = "0.1.0"
+description = ""
+authors = ["Juma <jums92547@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+djangorestframework = "^3.15.2"
+pillow = "^11.1.0"
+drf-spectacular = {extras = ["sidecar"], version = "^0.28.0"}
+djangorestframework-simplejwt = "^5.5.0"
+django-jazzmin = "^3.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
