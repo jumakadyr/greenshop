@@ -63,6 +63,13 @@ class Plant(models.Model):
         decimal_places=2,
         default=0.00,
         verbose_name='Цена'
+
+    )
+    discount_price = models.DecimalField(
+        null=True,
+        max_digits=10,
+        decimal_places=2,
+        default=0.00,
     )
     rating = models.DecimalField(
         max_digits=3,
@@ -91,6 +98,16 @@ class Plant(models.Model):
 
     def __str__(self):
         return self.name
+
+    def discount_percentage(self):
+        if self.discount_price:
+            return(100 * self.discount_price) / self.price
+
+    def final_product_price(self):
+        if self.discount_price:
+            return self.price - self.discount_price
+
+
 
 
 class PlantImage(models.Model):
@@ -135,3 +152,8 @@ def plant_delete_receiver(sender, instance, **kwargs):
             if os.path.exists(image.image.path):
                 os.remove(image.image.path)
             image.delete()
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)

@@ -12,6 +12,7 @@ pillow = "^11.1.0"
 drf-spectacular = {extras = ["sidecar"], version = "^0.28.0"}
 djangorestframework-simplejwt = "^5.5.0"
 django-jazzmin = "^3.0.1"
+django-filter = "^25.1"
 
 
 [build-system]
