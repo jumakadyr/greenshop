@@ -1,37 +1,21 @@
 import django_filters
+
+from .choices import PlantSizeChoices
 from .models import Plant, Category
-from .choices import *
+
 
 class PlantFilter(django_filters.FilterSet):
     category = django_filters.ModelMultipleChoiceFilter(
-        field_name="categories",
+        field_name='categories',
         queryset=Category.objects.all(),
-        to_field_name="id",
+        to_field_name='id'
     )
-    max_price = django_filters.NumberFilter(
-        field_name="price",
-        lookup_expr="gte",
-    )
-    min_price = django_filters.NumberFilter(
-        field_name="price",
-        lookup_expr="lte",
-    )
-    class Meta:
-        model = Plant
-        fields = ['category', 'max_price', 'min_price']
-
-class PlantSizeFilter(django_filters.FilterSet):
-    category = django_filters.ModelMultipleChoiceFilter(
-        field_name="categories",
-        queryset=Category.objects.all(),
-        to_field_name="id",
-    )
-    size = django_filters.ModelMultipleChoiceFilter(
-        field_name="sizes",
+    size = django_filters.ChoiceFilter(
+        field_name='size',
         choices=PlantSizeChoices.choices
     )
+    price = django_filters.RangeFilter(field_name='price')
 
     class Meta:
         model = Plant
-        fields = ['category', 'size']
-
+        fields = ['category', 'size', 'price']

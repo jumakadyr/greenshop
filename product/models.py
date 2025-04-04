@@ -1,5 +1,7 @@
 import os
 from django.db import models
+
+from account.models import User
 from product.choices import PlantSizeChoices
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -63,14 +65,12 @@ class Plant(models.Model):
         decimal_places=2,
         default=0.00,
         verbose_name='Цена'
-
     )
     discount_price = models.DecimalField(
         null=True,
         max_digits=10,
         decimal_places=2,
-        default=0.00,
-    )
+        default=0.00)
     rating = models.DecimalField(
         max_digits=3,
         decimal_places=2,
@@ -100,14 +100,14 @@ class Plant(models.Model):
         return self.name
 
     def discount_percentage(self):
-        if self.discount_price:
-            return(100 * self.discount_price) / self.price
+        if self.discount_price and self.price > 0:
+            return (100 * self.discount_price) / self.price
+        return 0
 
     def final_product_price(self):
         if self.discount_price:
             return self.price - self.discount_price
-
-
+        return self.price
 
 
 class PlantImage(models.Model):
@@ -127,22 +127,17 @@ class PlantImage(models.Model):
         verbose_name_plural = 'Рисунки растений'
 
 
-class Cart(models.Model):
-    plant = models.ForeignKey(
-        to=Plant,
-        on_delete=models.CASCADE,
-        related_name='carts',
-        verbose_name='Корзина'
-    )
-    added_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-        ordering = ['-added_at']
+class PlantComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.plant.name
+        return f"Comment by {self.user.username} on {self.plant.name} at {self.created_at}"
+
+    class Meta:
+        ordering = ['created_at']
 
 
 @receiver(post_delete, sender=Plant)
@@ -152,8 +147,3 @@ def plant_delete_receiver(sender, instance, **kwargs):
             if os.path.exists(image.image.path):
                 os.remove(image.image.path)
             image.delete()
-
-
-class Product(models.Model):
-    name = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)

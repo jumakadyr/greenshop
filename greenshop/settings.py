@@ -11,7 +11,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'jazzmin',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,6 +27,8 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'product.apps.ProductConfig',
     'post.apps.PostConfig',
+    'cart.apps.CartConfig',
+    'checkout.apps.CheckoutConfig',
 ]
 
 MIDDLEWARE = [
@@ -90,8 +91,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-
+        'PAGE_SIZE': 2,
 }
 
 SIMPLE_JWT = {
@@ -126,7 +126,7 @@ SPECTACULAR_SETTINGS = {
     'REDOC_DIST': 'SIDECAR',
 }
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'Asia/Bishkek'
 
@@ -143,11 +143,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Green Shop Admin",
-    "site_header": 'Green shop',
-    "site_brand": "Green shop",
+    "site_title": "Greenshop Admin",
+    "site_header": "Greenshop",
+    "site_brand": "Greenshop",
     "site_logo_classes": "img-circle",
-    "welcome_sign": "Welcome to the NEO Fund Admin!",
+    "welcome_sign": "Welcome to the Greenshop Admin!",
     "search_model": ["account.User"],
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},

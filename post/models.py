@@ -1,18 +1,15 @@
 import os
-
 from django.db import models
+from account.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-
-from account.models import User
-
 
 class Post(models.Model):
     owner = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
         related_name='posts',
-        verbose_name='Автор',
+        verbose_name='Автор'
     )
     title = models.CharField(
         max_length=255,
@@ -20,9 +17,9 @@ class Post(models.Model):
     )
     description = models.TextField(
         max_length=300,
-        verbose_name='Краткое описание',
+        verbose_name='Краткое описание'
     )
-    content = models.TextField(verbose_name='Контентэ')
+    content = models.TextField(verbose_name='Контент')
     published_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -42,11 +39,11 @@ class PostImage(models.Model):
         verbose_name='Рисунок'
     )
     image = models.ImageField(
-        upload_to='images/posts',
+        upload_to='images/posts/',
     )
 
     class Meta:
-        verbose_name = "Рисунок статьи"
+        verbose_name = 'Рисунок статьи'
         verbose_name_plural = 'Рисунки статей'
 
     def __str__(self):
@@ -54,7 +51,7 @@ class PostImage(models.Model):
 
 
 @receiver(post_delete, sender=Post)
-def plant_delete_receiver(sender, instance, **kwargs):
+def post_delete_receiver(sender, instance, **kwargs):
     if hasattr(instance, 'images'):
         for image in instance.images.all():
             if os.path.exists(image.image.path):
